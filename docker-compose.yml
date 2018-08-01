@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: postgres:11_alpine
+    environment:
+      - POSTGRES_PASSWORD=kaggle
+      - POSTGRES_USER=kaggle
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - ./database:/var/lib/postgresql/data
+
+  pgadmin:
+    image: fenglc/pgadmin4:2-python3.6-alpine
+    environment:
+      - DEFAULT_USER=sebastien@iooss.org
+      - DEFAULT_PASSWORD=seb
+    links:
+      - db:postgres
+    ports:
+      - 5050:5050
+
+  dataiku:
+    image: dataiku:4.3.3
+    ports:
+      - 10000:10000
+    volumes:
+      - ./dataiku:/home/dataiku/dss
+
